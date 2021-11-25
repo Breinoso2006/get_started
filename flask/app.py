@@ -1,17 +1,13 @@
-#import flask
-from os import environ, name
-from flask import Flask, render_template
+from flask import Flask, json, render_template, request
 from flask.helpers import url_for
 from werkzeug.utils import redirect
+from json import dumps
 
-app = Flask(__name__)
-app.config['ENV'] = 'development'
-app.config['DEBUG'] = True
-app.config['TESTING'] = True
+app = Flask(__name__, static_folder='templates')
 
 @app.route('/')
 def index():
-    return 'index'
+    return render_template('index.html')
 
 def test():
     return 'test with add url rule'
@@ -29,7 +25,7 @@ def admin():
 
 @app.route('/guest/<guest>')
 def guest(guest):
-    return '<h1>Guest:'+guest+ '</h1>'
+    return '<h1>Guest:' + guest + '</h1>'
 
 @app.route('/user/<name>')
 def user(name):
@@ -37,3 +33,16 @@ def user(name):
         return redirect(url_for('admin'))
     else:
         return redirect(url_for('guest', guest = name))
+
+@app.route('/add', methods=["GET","POST"])
+def add():
+    if request.method == "POST":
+        return dumps(request.form)
+    elif request.method == "GET":
+        return "GET MEHOD"
+
+@app.route('/index', methods=["GET","POST"])
+def index2():
+    t1 = request.args.to_dict()
+    t2 = dict(request.args)
+    return json.dumps([t1, t2])
