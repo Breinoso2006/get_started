@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="UTF-8">
+        <title>Jinja2</title>
+    </head>
+{# Comentários no Jinja2 #}
+    <body>
+        <table>
+            <tr>
+                <th>x</th> <th>y</th>
+            </tr>
+            <tr>
+                <td>{{valorx}}</td> <td>{{valory}}</td>
+            </tr>
+        </table>
+        <p>Valor de x + y = {{valorx + valory }} </p>
+        {% if valorx >= 50 %}
+            <p>x é >= 50, x = {{valorx}} </p>
+        {% else %}
+            <p>x é < 50, x = {{valorx}} </p>
+        {% endif %}
+        <hr>
+
+        <table border="">
+            {% for k,v in query.items() %}
+            <tr>
+                <th> {{ k }} </th>
+                <td> {{ v }} </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </body>
+
+</html>

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Resultado</title>
+</head>
+<body>
+    <p>Nota final: {{total}}</p>
+    <hr>
+    {% if total >= 70 %}
+        <p>Resultado: Aprovado</p>
+    {% elif total >= 40 %}
+        <p>Resultado: Prova final</p>
+    {% else %}
+        <p>Resultado: Reprovado</p>
+    {% endif %}
+</body>
+</html>

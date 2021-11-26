@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Notas</title>
+</head>
+<body>
+    <p>Prova 1</p>
+    <hr>
+    <form action="http://127.0.0.1:5000/calculo" method="post">
+        {% for x in range (4) %}
+            <input type="number" min="0" max="25" name="nota{{x}}" placeholder="Nota {{x}}" required>
+        {% endfor %}
+        <p>
+            <button type="submit">Submit</button>
+        </p>
+    </form>
+</body>
+</html>
