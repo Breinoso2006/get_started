@@ -1,9 +1,10 @@
-from flask import Flask, json, render_template, request, abort
+from flask import Flask, json, render_template, request, abort, make_response, session
 from flask.helpers import url_for
 from werkzeug.utils import redirect
 from json import dumps
 
 app = Flask(__name__, static_folder='templates/css', template_folder='templates')
+app.secret_key = "123456"
 
 
 #Criando rotas
@@ -89,3 +90,49 @@ def notas():
 def calculo():
     total = sum([int(v) for v in request.form.to_dict().values()])
     return render_template('calculo.html', total = total)
+
+#Cookies
+@app.route('/cookies')
+def cookies():
+    return render_template('cookies.html')
+
+@app.route('/setcookie', methods=['GET', 'POST'])
+def setcookie():
+    if request.method == "POST":
+        dados = request.form['c']
+    
+    resp = make_response(render_template('setcookie.html'))
+    resp.set_cookie('testeCookie', dados)
+
+    return resp
+
+@app.route('/getcookie')
+def getcookie():
+    cookie_name = request.cookies.get('testecookie')
+
+    return '<h1>Valor cookie é: {}</h1>'.format(cookie_name)
+
+#Session
+@app.route('/session')
+def sessionn():
+    username = ''
+    if 'username' in session:
+        username = session['username']
+    return render_template('session.html', username=username)
+
+@app.route('/sessionlogin', methods=["GET","POST"])
+def sessionlogin():
+    if request.method == "POST" and request.form['username'] != '':
+        session['username'] = request.form['username']
+        return redirect(url_for('sessionn'))
+    return render_template('sessionlogin.html')
+
+@app.route('/sessionlogout')
+def sessionlogout():
+    session.pop('username', None)
+    return redirect(url_for('sessionn'))
+
+@app.route('/sessiontest/<s>')
+def sessiontest(s):
+    session['username'] = s
+    return redirect(url_for('sessionn'))
