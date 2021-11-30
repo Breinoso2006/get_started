@@ -1,10 +1,12 @@
-from flask import Flask, json, render_template, request, abort, make_response, session
+from flask import Flask, json, render_template, request, abort, make_response, session, send_file
 from flask.helpers import url_for
-from werkzeug.utils import redirect
+from werkzeug.utils import redirect, secure_filename
 from json import dumps
+import os
 
 app = Flask(__name__, static_folder='templates/css', template_folder='templates')
 app.secret_key = "123456"
+UPLOAD_FOLDER = os.path.join(os.getcwd(), 'upload')
 
 
 #Criando rotas
@@ -136,3 +138,20 @@ def sessionlogout():
 def sessiontest(s):
     session['username'] = s
     return redirect(url_for('sessionn'))
+
+#Upload de arquivos
+@app.route('/upload')
+def upload():
+    return render_template('upload.html')
+
+@app.route('/uploadfeito', methods=["POST"])
+def uploadfeito():
+    file = request.files['imagem']
+    savePath = os.path.join(UPLOAD_FOLDER, secure_filename(file.filename))
+    file.save(savePath)
+    return 'Upload feito com sucesso'
+
+@app.route('/get-file/<filename>')
+def get_file(filename):
+    file = os.path.join(UPLOAD_FOLDER, filename + '.png')
+    return send_file(file, mimetype='image/png')
